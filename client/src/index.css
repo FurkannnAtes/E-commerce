@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.wrapper{
+    max-width: 1180px;
+}
+
+
+/* Home Banner Customize Start */
+
+.homeBanner .swiper-button-prev,
+.homeBanner .swiper-button-next{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    opacity: 0;
+    transition: 300ms all;
+    -webkit-transition: 300ms all;
+    -moz-transition: 300ms all;
+    -ms-transition: 300ms all;
+    -o-transition: 300ms all;
+}
+
+.homeBanner:hover .swiper-button-prev,
+.homeBanner:hover .swiper-button-next{
+    opacity: 1;
+}
+
+.homeBanner .swiper-button-prev::after,
+.homeBanner .swiper-button-next::after{
+    color: black;  
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.homeBanner .swiper-pagination-bullet{
+    width: 13px;
+    height: 13px;
+}
+
+.homeBanner .swiper-pagination-bullet.swiper-pagination-bullet-active{
+    background-color: black;
+    color: black;
+    border: 1px solid white;
+    
+}
+/* Home Banner Customize End*/
+
+
+/* For You Swiper Start */
+
+.forYouSwiper .swiper-button-prev,
+.forYouSwiper .swiper-button-next{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 100%;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    -ms-border-radius: 100%;
+    -o-border-radius: 100%;
+    opacity: 0;
+    transition: 300ms all;
+    -webkit-transition: 300ms all;
+    -moz-transition: 300ms all;
+    -ms-transition: 300ms all;
+    -o-transition: 300ms all;
+    border: solid 1px black;
+    top: 120px;
+   
+}
+.forYouSwiper:hover .swiper-button-prev,.forYouSwiper:hover .swiper-button-next{
+    opacity: 1;
+}
+.forYouSwiper .swiper-button-prev::after,.forYouSwiper .swiper-button-next::after{
+    color: black;  
+    font-size: 20px;
+    font-weight: 700;
+}
+.forYouSwiper .swiper-pagination-bullet{
+    width: 13px;
+    height: 13px;
+    background: gray;
+    opacity: 0.5;
+}
+.forYouSwiper .swiper-pagination-bullet.swiper-pagination-bullet-active{
+    background: black;
+    opacity: 1;
+    color: black;
+    border: 1px solid white;
+    
+}
+/* For You Swiper End */
