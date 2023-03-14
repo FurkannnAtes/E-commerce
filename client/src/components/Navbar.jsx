@@ -1,12 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 //icons
 import { BiSearchAlt } from "react-icons/bi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
 const Navbar = () => {
+  const location = useLocation();
+  const unValidPaths = ["/register", "/login"];
+
   return (
-    <div className=" flex flex-col ">
+    <div
+      className={`${
+        unValidPaths.includes(location.pathname) ? "hidden" : "flex"
+      }  flex-col `}
+    >
       <div className="h-[120px] md:h-[81px] bg-mainRed  flex items-center fixed w-full z-30">
         <div className="flex flex-col gap-2 md:flex-row p-2 md:justify-between wrapper mx-auto w-full">
           <div className="relative w-full md:w-7/12 h-[48px]">
@@ -39,10 +45,10 @@ const Navbar = () => {
                   My Account
                 </div>
                 <div className="flex items-center gap-2">
-                  <Link to="/">
+                  <Link to="/register">
                     <div className="hover:underline">Sing in</div>
                   </Link>
-                  <Link to="/">
+                  <Link to="/login">
                     <div className="hover:underline">Sing Up</div>
                   </Link>
                 </div>
