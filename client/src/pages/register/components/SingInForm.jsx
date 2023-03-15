@@ -5,17 +5,21 @@ import * as Yup from "yup";
 import { GoogleLogin } from "@react-oauth/google";
 
 import { useDispatch } from "react-redux";
-import { googleAuth, login } from "@/store/auth";
+import { googleAuth, register } from "@/store/auth";
 
-const SignUpForm = () => {
+const SignInForm = () => {
   const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
+      name: "",
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
+      name: Yup.string()
+        .max(20, "Minimun be 20 characters")
+        .required("Please do not leave any spaces in the form."),
       email: Yup.string()
         .email("Invalid email address")
         .required("Please do not leave any spaces in the form."),
@@ -25,7 +29,8 @@ const SignUpForm = () => {
     }),
     onSubmit: (values) => {
       dispatch(
-        login({
+        register({
+          name: values.name,
           email: values.email,
           password: values.password,
         })
@@ -37,7 +42,21 @@ const SignUpForm = () => {
       className="flex flex-col gap-2 border p-2 shadow-md bg-lightGray "
       onSubmit={formik.handleSubmit}
     >
-      <div className="text-3xl font-semibold ">Sing Up</div>
+      <div className="text-3xl font-semibold ">Sing In</div>
+
+      <label htmlFor="name">Full Name</label>
+      <input
+        id="name"
+        name="name"
+        type="text"
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        value={formik.values.name}
+        className="h-[40px] outline-none"
+      />
+      {formik.touched.name && formik.errors.name ? (
+        <div className="text-red-400">{formik.errors.name}</div>
+      ) : null}
 
       <label htmlFor="email">Email Address</label>
       <input
@@ -89,10 +108,10 @@ const SignUpForm = () => {
         className="bg-[#27C007] text-white font-semibold text-lg p-2"
         type="submit"
       >
-        Sing Up
+        Sing In
       </button>
     </form>
   );
 };
 
-export default SignUpForm;
+export default SignInForm;
