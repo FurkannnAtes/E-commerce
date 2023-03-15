@@ -1,11 +1,28 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/store/auth";
 //icons
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiLogOut } from "react-icons/bi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
+import { AiOutlineCaretUp } from "react-icons/ai";
 const Navbar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const unValidPaths = ["/register", "/login"];
+
+  const user = useSelector((state) => state.auth.user);
+  useEffect(() => {
+    const userUnValidPages = ["/register", "/login"];
+    if (user.userName) {
+      if (userUnValidPages.includes(location.pathname)) {
+        navigate("/");
+      }
+    }
+  }, [location.pathname, navigate, user]);
 
   return (
     <div
@@ -38,22 +55,45 @@ const Navbar = () => {
               <MdOutlineShoppingCart />
             </button>
             <div className="w-[1px] h-[20px] bg-black"></div>
-            <div className="text-white flex items-center gap-2">
-              <RxPerson className="text-4xl " />
-              <div className="flex flex-col">
-                <div className="text-sm font-semibold opacity-75">
-                  My Account
-                </div>
-                <div className="flex items-center gap-2">
-                  <Link to="/register">
-                    <div className="hover:underline">Sing in</div>
-                  </Link>
-                  <Link to="/login">
-                    <div className="hover:underline">Sing Up</div>
-                  </Link>
+            {!user.userName ? (
+              <div className="text-white flex items-center gap-2">
+                <RxPerson className="text-4xl " />
+                <div className="flex flex-col">
+                  <div className="text-sm font-semibold opacity-75">
+                    My Account
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Link to="/register">
+                      <div className="hover:underline">Sing in</div>
+                    </Link>
+                    <Link to="/login">
+                      <div className="hover:underline">Sing Up</div>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="group relative">
+                <img
+                  className="h-10 w-10 rounded-full cursor-pointer "
+                  src="assets/pp.png"
+                  alt=""
+                />
+                <div className="group-hover:flex hidden bg-white border  p-2 absolute right-0 top-[130%] w-[150px]">
+                  <div className="relative">
+                    <button
+                      className="flex items-center gap-1 text-xl justify-center"
+                      onClick={() => dispatch(logout())}
+                    >
+                      <BiLogOut /> <span>Log out</span>
+                    </button>
+                    <div className="absolute -top-[30px] -right-[45px] text-white text-3xl w-full flex justify-end">
+                      <AiOutlineCaretUp />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

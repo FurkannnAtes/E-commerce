@@ -6,6 +6,7 @@ import { GoogleLogin } from "@react-oauth/google";
 
 import { useDispatch } from "react-redux";
 import { googleAuth, register } from "@/store/auth";
+import { client } from "@/utils/client";
 
 const SignInForm = () => {
   const dispatch = useDispatch();
@@ -27,12 +28,15 @@ const SignInForm = () => {
         .min(8, "Minimun be 8 characters")
         .required("Please do not leave any spaces in the form."),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      const query = `*[_type == "user" && email == "${values.email}"][0]`;
+      const res = await client.fetch(query);
       dispatch(
         register({
           name: values.name,
           email: values.email,
           password: values.password,
+          res,
         })
       );
     },
@@ -100,7 +104,6 @@ const SignInForm = () => {
             onError={() => {
               console.log("Login Failed");
             }}
-            useOneTap
           />
         </div>
       </div>
