@@ -4,10 +4,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/auth";
 //icons
-import { BiSearchAlt, BiLogOut } from "react-icons/bi";
+import { BiSearchAlt } from "react-icons/bi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
 import { AiOutlineCaretUp } from "react-icons/ai";
+
 const Navbar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
@@ -33,14 +34,17 @@ const Navbar = () => {
       <div className="h-[120px] md:h-[81px] bg-mainRed  flex items-center fixed w-full z-30">
         <div className="flex flex-col gap-2 md:flex-row p-2 md:justify-between wrapper mx-auto w-full">
           <div className="relative w-full md:w-7/12 h-[48px]">
-            <div className="bg-lightGray absolute left-0 top-0 rounded-l-full flex items-center justify-center h-full px-5 py-2 gap-2 font-semibold ">
+            <Link
+              to="/"
+              className="bg-lightGray absolute left-0 top-0 rounded-l-full flex items-center justify-center h-full px-5 py-2 gap-2 font-semibold "
+            >
               <img
                 className="h-full w-full rounded-md"
-                src="assets/logo.png"
+                src="/assets/logo.png"
                 alt=""
               />
               <div>Ofenos</div>
-            </div>
+            </Link>
             <input
               className="h-full w-full rounded-full pl-36 outline-none"
               type="text"
@@ -76,18 +80,36 @@ const Navbar = () => {
               <div className="group relative">
                 <img
                   className="h-10 w-10 rounded-full cursor-pointer "
-                  src="assets/pp.png"
+                  src="/assets/pp.png"
                   alt=""
                 />
-                <div className="group-hover:flex hidden bg-white border  p-2 absolute right-0 top-[130%] w-[150px]">
-                  <div className="relative">
-                    <button
-                      className="flex items-center gap-1 text-xl justify-center"
-                      onClick={() => dispatch(logout())}
-                    >
-                      <BiLogOut /> <span>Log out</span>
-                    </button>
-                    <div className="absolute -top-[30px] -right-[45px] text-white text-3xl w-full flex justify-end">
+                <div className="group-hover:flex hidden bg-white border  py-2 absolute right-0 top-[130%] w-[150px]">
+                  <div className="relative flex flex-col gap-2 w-full">
+                    <div className="w-full p-2 hover:bg-lightGray ">
+                      <Link
+                        to="/"
+                        className="flex items-center gap-1 text-xl w-full  "
+                      >
+                        <span>Account</span>
+                      </Link>
+                    </div>
+                    <div className="w-full p-2 hover:bg-lightGray ">
+                      <Link
+                        to={`/myProducts/${user.userId}`}
+                        className="flex items-center gap-1 text-xl w-full"
+                      >
+                        <span>My products</span>
+                      </Link>
+                    </div>
+                    <div className="w-full p-2 hover:bg-lightGray border-t ">
+                      <button
+                        className="flex items-center gap-1 text-xl w-full  "
+                        onClick={() => dispatch(logout())}
+                      >
+                        <span>Log out</span>
+                      </button>
+                    </div>
+                    <div className="absolute -top-[30px] right-[4px] text-white text-3xl w-full flex justify-end">
                       <AiOutlineCaretUp />
                     </div>
                   </div>
