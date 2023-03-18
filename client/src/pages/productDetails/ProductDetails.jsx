@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   getSingleProduct,
   evaluationCalculate,
@@ -63,7 +63,13 @@ const ProductDetails = () => {
             <div className="text-xl font-semibold">{data.caption}</div>
             <div className="text-xl font-semibold">
               <span className="text-mainRed">Seller: </span>
-              {productUser?.userName}
+              <Link
+                to={`/myProducts/${productUser._id}`}
+                className="hover:underline "
+              >
+                {" "}
+                {productUser?.userName}
+              </Link>
             </div>
             <div className="text-xl font-semibold">
               <span className="text-mainRed ">Brand: </span>

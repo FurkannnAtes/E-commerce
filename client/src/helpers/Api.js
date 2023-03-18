@@ -36,9 +36,21 @@ export const getSingleProduct = async (productId) => {
   }
 };
 
-//Get My Products sorted by price
+//Get My Products sorted by price lowest
 
-export const getMyProductsSortedByPrice = async (userId) => {
+export const getMyProductsSortedByPriceLowest = async (userId) => {
+  try {
+    const query = `*[_type == "product" && sellingBy._ref == "${userId}"]| order(price asc)`;
+    const res = await client.fetch(query);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Get My Products sorted by price highest
+
+export const getMyProductsSortedByHighest = async (userId) => {
   try {
     const query = `*[_type == "product" && sellingBy._ref == "${userId}"]| order(price desc)`;
     const res = await client.fetch(query);
@@ -46,6 +58,33 @@ export const getMyProductsSortedByPrice = async (userId) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+//Get MyProducts Top rated
+export const evaluationAllCalculate = async (productId) => {
+  const query = `*[_type == "product" && sellingBy._ref == "${productId}"]`;
+  const res = await client.fetch(query);
+  let num = 0;
+
+  const array = [];
+  for (let i = 0; i < res.length; i++) {
+    for (let p = 0; p < res[i].comments?.length; p++) {
+      if (res[i].comments[p]?.star === 0) {
+      } else {
+        num += parseInt(res[i].comments[p].star);
+      }
+    }
+    const newObject = { num, res: res[i] };
+    array.push(newObject);
+    num = 0;
+  }
+  array.sort((a, b) => b.num - a.num);
+  const response = [];
+  for (let i = 0; i < array.length; i++) {
+    response.push(array[i].res);
+  }
+
+  return response;
 };
 
 //Get New Products
