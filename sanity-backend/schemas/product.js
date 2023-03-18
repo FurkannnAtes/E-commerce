@@ -55,8 +55,7 @@ export default {
       type: 'array',
       of: [
         {
-          type: 'reference',
-          to: [{type: 'comment'}],
+          type: 'comment',
         },
       ],
     },

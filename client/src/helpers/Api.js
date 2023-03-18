@@ -24,11 +24,11 @@ export const getMyProducts = async (userId) => {
   }
 };
 
-//Get SinglePost
+//Get Single Product
 
-export const getSinglePost = async (postId) => {
+export const getSingleProduct = async (productId) => {
   try {
-    const query = `*[_type == "product" && _key == "${postId}"][0]`;
+    const query = `*[_type == "product" && _id == "${productId}"][0]`;
     const res = await client.fetch(query);
     return res;
   } catch (error) {
@@ -72,6 +72,21 @@ export const getProductsSortedByPrice = async () => {
   }
 };
 
+//Product evaluation calculate
+
+export const evaluationCalculate = async (productId) => {
+  const query = `*[_type == "product" && _id == "${productId}"][0]`;
+  const res = await client.fetch(query);
+
+  let num = 0;
+
+  for (let i = 0; i < res.comments?.length; i++) {
+    num += parseInt(res.comments[i].star);
+  }
+  const calcEvaluation = num / res.comments.length;
+  return calcEvaluation;
+};
+
 //Get users sorted By date
 
 export const getUsers = async () => {
@@ -88,7 +103,7 @@ export const getUsers = async () => {
 
 export const getSingleUser = async (userId) => {
   try {
-    const query = `*[_type == "user" && _id === "${userId}"][0]`;
+    const query = `*[_type == "user" && subId == "${userId}"][0]`;
     const res = await client.fetch(query);
     return res;
   } catch (error) {

@@ -20,7 +20,7 @@ const CreateProductFrom = () => {
     setIsLoading(true);
     const selectedFile = e.target.files[0];
 
-    const fileTypes = ["image/png", "image/jpg", "image/webm"];
+    const fileTypes = ["image/png", "image/jpeg", "image/webm"];
     if (fileTypes.includes(selectedFile.type)) {
       if (productPhotos.length !== 4) {
         client.assets
@@ -103,6 +103,7 @@ const CreateProductFrom = () => {
           _ref: user.userId,
         },
         likes: [],
+        comments: [],
       });
       formik.resetForm();
       setProductPhotos([]);

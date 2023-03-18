@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AliExpressProducts } from "@/helpers/Api";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,11 +12,12 @@ import "swiper/css/effect-fade";
 import { Autoplay, Pagination, Navigation } from "swiper";
 import ProductCard from "@/components/ProductCard";
 import Skeleton from "@/components/Skeleton";
+import { getProducts } from "@/helpers/Api";
 
 const ForYou = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
-    AliExpressProducts().then((res) => setData(res));
+    getProducts().then((res) => setData(res));
   }, []);
 
   return (
@@ -56,13 +56,13 @@ const ForYou = () => {
           modules={[Autoplay, Pagination, Navigation]}
           className="h-[360px] forYouSwiper rounded-md "
         >
-          {data.length !== 0
+          {data?.length !== 0
             ? data?.map((product, i) => (
                 <SwiperSlide key={i} className="h-full">
                   <ProductCard product={product} />
                 </SwiperSlide>
               ))
-            : [...Array(20)].map((skeleton, i) => (
+            : [...Array(5)].map((skeleton, i) => (
                 <SwiperSlide key={i} className="h-full">
                   <Skeleton type="swiperProductCard" />
                 </SwiperSlide>
