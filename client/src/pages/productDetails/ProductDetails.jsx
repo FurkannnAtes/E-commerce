@@ -11,17 +11,21 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import ReactStars from "react-stars";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserBasket } from "@/store/basket";
+import { client } from "@/utils/client";
 const ProductDetails = () => {
   const [data, setData] = useState({});
   const [amount, setAmount] = useState(1);
   const [maxAmount, setMaxAmount] = useState(0);
+  const [renderPage, setRenderPage] = useState(0);
   const [productUser, setProductUser] = useState({});
   const [evaluation, setEvaluation] = useState(0);
   const [showImg, setShowImg] = useState(0);
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   useEffect(() => {
     getSingleProduct(params.id).then((res) => {
       setData(res);
@@ -31,8 +35,10 @@ const ProductDetails = () => {
       calcMaxAmount(user.userId, res._id, res.stock).then((res) => {
         setMaxAmount(res);
       });
+      const query = `*[_type == "user" && subId == "${user.userId}"][0]`;
+      client.fetch(query).then((res) => dispatch(getUserBasket(res.basket)));
     });
-  }, [navigate, params.id, user.userId]);
+  }, [navigate, params.id, user.userId, renderPage, dispatch]);
 
   return (
     <div className="min-h-screen py-5 flex flex-col gap-5 wrapper mx-auto select-none">
@@ -124,9 +130,11 @@ const ProductDetails = () => {
 
           <div className="mt-auto ">
             <button
-              onClick={() =>
-                addBasket(user.userId, data._id, amount).then(navigate("/"))
-              }
+              onClick={async () => {
+                await addBasket(user.userId, data._id, amount);
+
+                setRenderPage(renderPage + 1);
+              }}
               className="bg-green-400 py-2 w-full rounded-md text-white flex justify-center items-center text-xl font-semibold"
             >
               <MdOutlineShoppingCart /> <span>Add Basket</span>

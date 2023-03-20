@@ -1,15 +1,5 @@
-import axios from "axios";
 import { client } from "@/utils/client";
 import { uid } from "uid";
-export const AliExpressProducts = async () => {
-  try {
-    const res = await axios.get("https://fakestoreapi.com/products");
-
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 //Get My Products sorted by date
 
@@ -203,6 +193,23 @@ export const calcMaxAmount = async (userId, productId, maxAmount) => {
     } else {
       return maxAmount;
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Delete Product from basket
+export const deleteProductFromBasket = async (userId, productId) => {
+  try {
+    const userQuery = `*[_type == "user" && subId == "${userId}"][0]`;
+    const user = await client.fetch(userQuery);
+
+    const newBasket = await user.basket.filter(
+      (i) => i.product._id !== productId
+    );
+
+    const res = await client.patch(userId).set({ basket: newBasket }).commit();
+    return res.basket;
   } catch (error) {
     console.log(error);
   }
