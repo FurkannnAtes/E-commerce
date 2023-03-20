@@ -26,6 +26,7 @@ export const authSlice = createSlice({
         subId: decode.sub,
         email: decode.email,
         buymentStory: [],
+        basket: [],
       });
 
       const newUser = {
@@ -64,6 +65,7 @@ export const authSlice = createSlice({
           email: action.payload.email,
           password: action.payload.password,
           buymentStory: [],
+          basket: [],
         });
 
         const newUser = {

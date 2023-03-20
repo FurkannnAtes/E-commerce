@@ -34,5 +34,20 @@ export default {
         },
       ],
     },
+    {
+      title: 'Basket',
+      type: 'array',
+      name: 'basket',
+      of: [
+        {
+          type: 'object',
+          name: 'products',
+          fields: [
+            {type: 'reference', name: 'product', to: [{type: 'product'}]},
+            {type: 'number', name: 'amount'},
+          ],
+        },
+      ],
+    },
   ],
 }

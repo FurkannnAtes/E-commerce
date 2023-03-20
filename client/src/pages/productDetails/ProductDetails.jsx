@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import CounterInput from "react-counter-input";
 import {
   getSingleProduct,
   evaluationCalculate,
   getSingleUser,
+  addBasket,
+  calcMaxAmount,
 } from "@/helpers/Api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import ReactStars from "react-stars";
-
+import { useSelector } from "react-redux";
 const ProductDetails = () => {
   const [data, setData] = useState({});
+  const [amount, setAmount] = useState(1);
+  const [maxAmount, setMaxAmount] = useState(0);
   const [productUser, setProductUser] = useState({});
   const [evaluation, setEvaluation] = useState(0);
   const [showImg, setShowImg] = useState(0);
-
+  const user = useSelector((state) => state.auth.user);
   const params = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     getSingleProduct(params.id).then((res) => {
       setData(res);
 
       evaluationCalculate(params.id).then((res) => setEvaluation(res));
       getSingleUser(res?.sellingBy?._ref).then((res) => setProductUser(res));
+      calcMaxAmount(user.userId, res._id, res.stock).then((res) => {
+        setMaxAmount(res);
+      });
     });
-  }, [params.id]);
+  }, [navigate, params.id, user.userId]);
 
   return (
-    <div className="min-h-screen py-5 flex flex-col gap-5 wrapper mx-auto ">
+    <div className="min-h-screen py-5 flex flex-col gap-5 wrapper mx-auto select-none">
       <div className="flex h-[580px]   gap-5 border rounded-md p-5 ">
         <div className="flex flex-col items-center w-1/2 border rounded-md p-5 justify-between">
           <div>
@@ -97,9 +106,29 @@ const ProductDetails = () => {
               {data.price} <span className="text-green-400">$</span>
             </div>
           </div>
+          <div>
+            {maxAmount === 0 ? (
+              <div className="border  text-xl border-mainRed font-semibold text-mainRed w-fit p-2 rounded-md my-2 opacity-80">
+                Out of stock
+              </div>
+            ) : (
+              <CounterInput
+                min={1}
+                count={amount}
+                max={parseInt(maxAmount)}
+                onCountChange={(count) => setAmount(count)}
+              />
+            )}
+          </div>
           <p className="h-full line-clamp-6">{data.description}</p>
+
           <div className="mt-auto ">
-            <button className="bg-green-400 py-2 w-full rounded-md text-white flex justify-center items-center text-xl font-semibold">
+            <button
+              onClick={() =>
+                addBasket(user.userId, data._id, amount).then(navigate("/"))
+              }
+              className="bg-green-400 py-2 w-full rounded-md text-white flex justify-center items-center text-xl font-semibold"
+            >
               <MdOutlineShoppingCart /> <span>Add Basket</span>
             </button>
           </div>
@@ -123,7 +152,7 @@ const ProductDetails = () => {
                   <div className=" min-w-[100px]">
                     <ReactStars
                       count={5}
-                      value={comment.star}
+                      value={parseInt(comment.star)}
                       size={24}
                       edit={false}
                       color2={"#ffd700"}
