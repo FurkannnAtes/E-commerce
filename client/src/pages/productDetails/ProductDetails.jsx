@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import CounterInput from "react-counter-input";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   getSingleProduct,
   evaluationCalculate,
@@ -14,6 +16,7 @@ import ReactStars from "react-stars";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserBasket } from "@/store/basket";
 import { client } from "@/utils/client";
+import { ImSpinner2 } from "react-icons/im";
 const ProductDetails = () => {
   const [data, setData] = useState({});
   const [amount, setAmount] = useState(1);
@@ -22,6 +25,7 @@ const ProductDetails = () => {
   const [productUser, setProductUser] = useState({});
   const [evaluation, setEvaluation] = useState(0);
   const [showImg, setShowImg] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
   const navigate = useNavigate();
@@ -39,11 +43,25 @@ const ProductDetails = () => {
       client.fetch(query).then((res) => dispatch(getUserBasket(res.basket)));
     });
   }, [navigate, params.id, user.userId, renderPage, dispatch]);
-
+  const addBasketSuccess = (message) => toast.success(message);
+  const addBasketError = (message) => toast.error(message);
   return (
     <div className="min-h-screen py-5 flex flex-col gap-5 wrapper mx-auto select-none">
-      <div className="flex h-[580px]   gap-5 border rounded-md p-5 ">
-        <div className="flex flex-col items-center w-1/2 border rounded-md p-5 justify-between">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
+      <div className="flex flex-col-reverse md:flex-row md:h-[580px]   gap-5 border rounded-md p-5 ">
+        <div className="flex flex-col items-center w-full md:w-1/2 border rounded-md p-5 justify-between">
           <div>
             {data.picture ? (
               <LazyLoadImage
@@ -73,7 +91,7 @@ const ProductDetails = () => {
             ))}
           </div>
         </div>
-        <div className="w-1/2 h-full flex flex-col  ">
+        <div className=" w-full md:w-1/2 h-full flex flex-col  ">
           <div className="flex flex-col gap-2 border-b pb-5">
             <div className="text-xl font-semibold">{data.caption}</div>
             <div className="text-xl font-semibold">
@@ -131,13 +149,28 @@ const ProductDetails = () => {
           <div className="mt-auto ">
             <button
               onClick={async () => {
-                await addBasket(user.userId, data._id, amount);
-
+                setIsLoading(true);
+                try {
+                  await addBasket(user.userId, data._id, amount);
+                  addBasketSuccess(
+                    "The product has been successfully added to the cart"
+                  );
+                } catch (error) {
+                  addBasketError("There was a problem adding the product cart");
+                }
                 setRenderPage(renderPage + 1);
+                setIsLoading(false);
               }}
-              className="bg-green-400 py-2 w-full rounded-md text-white flex justify-center items-center text-xl font-semibold"
+              className="bg-green-400 h-[40px] w-full rounded-md text-white flex justify-center items-center text-xl font-semibold"
             >
-              <MdOutlineShoppingCart /> <span>Add Basket</span>
+              {isLoading ? (
+                <ImSpinner2 className="animate-spin " />
+              ) : (
+                <>
+                  <MdOutlineShoppingCart />
+                  <span>Add Basket</span>
+                </>
+              )}
             </button>
           </div>
         </div>

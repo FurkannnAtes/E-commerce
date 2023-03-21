@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { client } from "@/utils/client";
@@ -12,9 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 const CreateProductFrom = () => {
   const [productPhotos, setProductPhotos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [mainImg, setMainImg] = useState(0);
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
+  const uploadImgInputREf = useRef(null);
   //Upload image
   const uploadImage = (e) => {
     setIsLoading(true);
@@ -31,6 +32,7 @@ const CreateProductFrom = () => {
           .then((document) => {
             setProductPhotos([...productPhotos, document.url]);
             setIsLoading(false);
+            setMainImg(productPhotos.length);
           })
           .catch((error) => {
             console.error("Upload failed:", error.message);
@@ -48,7 +50,8 @@ const CreateProductFrom = () => {
   //delete Image
   const deletePhoto = (e, i) => {
     const newPhotoList = productPhotos;
-    setProductPhotos(newPhotoList.filter((item, index) => index !== i - 1));
+    setProductPhotos(newPhotoList.filter((item, index) => index !== i));
+    setMainImg(0);
   };
   const formik = useFormik({
     initialValues: {
@@ -114,7 +117,7 @@ const CreateProductFrom = () => {
 
   const errorForm = (message) => toast.error(message);
   return (
-    <div className="flex gap-5 items-center w-full">
+    <div className="flex flex-col md:flex-row gap-5 items-center w-full px-5 md:-px-0">
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
@@ -128,7 +131,7 @@ const CreateProductFrom = () => {
         theme="light"
       />
       <form
-        className="flex flex-col gap-2 h-fit border p-2 shadow-md bg-lightGray  w-1/2"
+        className="flex flex-col w-full gap-2 h-fit border p-2 shadow-md bg-lightGray md:w-1/2"
         onSubmit={formik.handleSubmit}
       >
         <div className="text-3xl font-semibold ">Create Product</div>
@@ -200,6 +203,7 @@ const CreateProductFrom = () => {
             id="pictures"
             name="pictures"
             type="file"
+            ref={uploadImgInputREf}
             onChange={(e) => {
               formik.handleChange(e);
               uploadImage(e);
@@ -251,25 +255,43 @@ const CreateProductFrom = () => {
           {isLoading ? <ImSpinner2 className="animate-spin" /> : "Create"}
         </button>
       </form>
-      <div className="w-1/2 h-full rounded-md overflow-hidden">
+      <div className="w-full md:w-1/2 h-full rounded-md overflow-hidden">
         {productPhotos?.length !== 0 ? (
-          <div className="flex items gap-5">
-            {productPhotos?.map((picture, i) => (
-              <div key={i} className="w-full relative group">
-                <img className="w-full h-full" key={i} src={picture} alt="" />
-                <div className="text-9xl font-semibold  text-lightGray absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[rgb(0,0,0,0.2)] opacity-0 group-hover:opacity-100 ">
-                  {(i += 1)}
+          <div className="flex flex-col items-center h-full  gap-5">
+            <div className="border rounded-md overflow-hidden h-full">
+              <img
+                className="h-full w-full object-contain"
+                src={productPhotos[mainImg]}
+                alt=""
+              />
+            </div>
+            <div className="flex gap-2 items-center">
+              {" "}
+              {productPhotos?.map((picture, i) => (
+                <div
+                  key={i}
+                  className="w-full relative group border p-2 rounded-md cursor-pointer"
+                >
+                  <img
+                    className="w-[50px] h-[50px] rounded-md object-contain"
+                    key={i}
+                    src={picture}
+                    alt=""
+                    onClick={() => setMainImg(i)}
+                  />
+                  <div>
+                    <button
+                      onClick={(e) => {
+                        deletePhoto(e, i);
+                      }}
+                      className="bg-black hidden group-hover:flex text-white text-xl rounded-full absolute top-0 right-0"
+                    >
+                      <AiOutlineClose />
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <button
-                    onClick={(e) => deletePhoto(e, i)}
-                    className="bg-black text-white text-4xl rounded-full absolute top-3 right-3"
-                  >
-                    <AiOutlineClose />
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ) : (
           <img className="h-full w-full" src="/assets/defaultImg.jpg" alt="" />
