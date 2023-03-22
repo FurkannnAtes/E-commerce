@@ -8,7 +8,7 @@ const Footer = () => {
     <div
       className={`${
         unValidPaths.includes(location.pathname) ? "hidden" : "block"
-      } border-t text-center bg-mainRed py-2 text-sm font-semibold text-white`}
+      } border-t text-center bg-mainRed py-2 text-sm font-semibold text-white mt-auto`}
     >
       Created By Ofenos
     </div>

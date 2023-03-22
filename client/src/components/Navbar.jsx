@@ -119,7 +119,7 @@ const Navbar = () => {
                                   Amount: {item.amount}
                                 </div>
                                 <div>
-                                  {item.product.price}
+                                  {parseInt(item.product.price) * item.amount}
                                   <span className="text-green-400">$</span>
                                 </div>
                               </div>
@@ -157,6 +157,7 @@ const Navbar = () => {
                   <div className="text-xs font-semibold opacity-75">
                     My Account
                   </div>
+
                   <div className="flex items-center gap-2">
                     <Link to="/register">
                       <div className="hover:underline">Sing in</div>
@@ -202,12 +203,21 @@ const Navbar = () => {
                         <span>My products</span>
                       </Link>
                     </div>
+                    <div className="w-full px-2 hover:text-gray-400 ">
+                      <Link
+                        to="/buymentHistory"
+                        className="flex items-center gap-1 text-sm w-full"
+                      >
+                        Purchase history
+                      </Link>
+                    </div>
                     <div className="w-full px-2 hover:text-gray-400  ">
                       <button
                         className="flex items-center gap-1 text-sm w-full  "
                         onClick={() => {
                           dispatch(logout());
                           dispatch(logoutBasket());
+                          navigate("/");
                         }}
                       >
                         <span>Log out</span>

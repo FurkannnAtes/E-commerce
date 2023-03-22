@@ -29,8 +29,13 @@ export default {
       type: 'array',
       of: [
         {
-          type: 'reference',
-          to: [{type: 'product'}],
+          type: 'object',
+          name: 'products',
+          fields: [
+            {type: 'reference', name: 'product', to: [{type: 'product'}]},
+            {type: 'number', name: 'amount'},
+            {type: 'date', name: 'date'},
+          ],
         },
       ],
     },
@@ -45,6 +50,7 @@ export default {
           fields: [
             {type: 'reference', name: 'product', to: [{type: 'product'}]},
             {type: 'number', name: 'amount'},
+            {type: 'date', name: 'date'},
           ],
         },
       ],

@@ -148,6 +148,7 @@ const ProductDetails = () => {
 
           <div className="mt-auto ">
             <button
+              disabled={isLoading || maxAmount === 0}
               onClick={async () => {
                 setIsLoading(true);
                 try {
@@ -158,6 +159,7 @@ const ProductDetails = () => {
                 } catch (error) {
                   addBasketError("There was a problem adding the product cart");
                 }
+                setAmount(1);
                 setRenderPage(renderPage + 1);
                 setIsLoading(false);
               }}
@@ -167,8 +169,14 @@ const ProductDetails = () => {
                 <ImSpinner2 className="animate-spin " />
               ) : (
                 <>
-                  <MdOutlineShoppingCart />
-                  <span>Add Basket</span>
+                  {maxAmount === 0 ? (
+                    "Out of Stock"
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <MdOutlineShoppingCart />
+                      <span>Add Basket</span>
+                    </div>
+                  )}
                 </>
               )}
             </button>

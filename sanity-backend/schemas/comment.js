@@ -14,6 +14,11 @@ export default {
       type: 'string',
     },
     {
+      name: 'commentKey',
+      title: 'Comment Key',
+      type: 'string',
+    },
+    {
       name: 'comment',
       title: 'Comment',
       type: 'string',
