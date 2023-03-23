@@ -11,16 +11,22 @@ import {
 } from "@/helpers/Api";
 
 import MyProductCard from "./components/MyProductCards";
+import Skeleton from "@/components/Skeleton";
 
 const MyProducts = () => {
   const [data, setData] = useState([]);
   const [seller, setSeller] = useState({});
   const [productFilter, setProductFilter] = useState("new");
+  const [skeleton, setSkeleton] = useState(true);
+
   const user = useSelector((state) => state.auth.user);
   const params = useParams();
   useEffect(() => {
     filterProducts();
-    getSingleUser(params.id).then((res) => setSeller(res));
+    getSingleUser(params.id).then((res) => {
+      setSeller(res);
+      setSkeleton(false);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id, productFilter]);
 
@@ -81,6 +87,7 @@ const MyProducts = () => {
         {data?.map((product, i) => (
           <MyProductCard key={i} product={product} />
         ))}
+        {skeleton ? <Skeleton type="myProductCard" /> : null}
       </div>
     </div>
   );

@@ -26,12 +26,17 @@ export default {
     {
       name: 'star',
       title: 'Star',
-      type: 'string',
+      type: 'number',
     },
     {
       name: 'userId',
       title: 'User Id',
       type: 'string',
+    },
+    {
+      name: 'date',
+      title: 'Date',
+      type: 'date',
     },
   ],
 }

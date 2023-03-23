@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { AiOutlineDoubleRight } from "react-icons/ai";
-import { ImSpinner2 } from "react-icons/im";
+
 import { buyBasket } from "@/helpers/Api";
 import { logoutBasket } from "@/store/basket";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "./components/ProductCard";
+import LoadingModal from "@/components/LoadingModal";
 
 const Basket = () => {
   const [total, setTotal] = useState(0);
@@ -101,18 +102,7 @@ const Basket = () => {
         </div>
       )}
 
-      {isLoading ? (
-        <div className="fixed z-[999] left-0 top-0 backdrop-blur-sm flex items-center justify-center w-screen h-screen select-none">
-          <div className="bg-white rounded-lg p-5 border">
-            <div className="flex items-center justify-center">
-              <ImSpinner2 className="animate-spin text-5xl text-mainRed" />
-            </div>
-            <div className="font-semibold text-lg">
-              Please wait, the process continues
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {isLoading ? <LoadingModal /> : null}
     </div>
   );
 };
