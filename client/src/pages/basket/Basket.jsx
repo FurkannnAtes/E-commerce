@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { AiOutlineDoubleRight } from "react-icons/ai";
-
 import { buyBasket } from "@/helpers/Api";
 import { logoutBasket } from "@/store/basket";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import ProductCard from "./components/ProductCard";
 import LoadingModal from "@/components/LoadingModal";
+
+//TOASTIFY
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Basket = () => {
   const [total, setTotal] = useState(0);

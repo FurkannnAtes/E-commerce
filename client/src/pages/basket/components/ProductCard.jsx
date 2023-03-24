@@ -1,11 +1,12 @@
 import { BsTrash } from "react-icons/bs";
-
 import { deleteProductFromBasket } from "@/helpers/Api";
 import { getUserBasket } from "@/store/basket";
-import "react-toastify/dist/ReactToastify.css";
+import { useDispatch, useSelector } from "react-redux";
+
+//TOASTIFY
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
+
 const ProductCard = ({ item, setIsLoading }) => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();

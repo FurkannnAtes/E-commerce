@@ -8,6 +8,7 @@ import {
   Basket,
   Search,
   BuymentHistory,
+  EditProduct,
 } from "@/pages";
 
 const routes = [
@@ -20,6 +21,7 @@ const routes = [
   { path: "/basket", component: <Basket /> },
   { path: "/buymentHistory", component: <BuymentHistory /> },
   { path: "/search", component: <Search /> },
+  { path: "/edit/:id", component: <EditProduct /> },
 ];
 
 export default routes;

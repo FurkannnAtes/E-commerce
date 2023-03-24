@@ -3,7 +3,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { client } from "@/utils/client";
 import { useSelector } from "react-redux";
-import { uid } from "uid";
 import { useNavigate } from "react-router-dom";
 
 //TOASTIFY
@@ -14,8 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineClose } from "react-icons/ai";
 import { ImSpinner2 } from "react-icons/im";
 
-const CreateProductFrom = () => {
-  const [productPhotos, setProductPhotos] = useState([]);
+const EditForm = ({ data }) => {
+  const [productPhotos, setProductPhotos] = useState(data.picture);
   const [isLoading, setIsLoading] = useState(false);
   const [mainImg, setMainImg] = useState(0);
   const navigate = useNavigate();
@@ -60,13 +59,13 @@ const CreateProductFrom = () => {
   };
   const formik = useFormik({
     initialValues: {
-      caption: "",
-      price: "",
-      topic: "",
-      description: "",
+      caption: data.caption,
+      price: data.price,
+      topic: data.topic,
+      description: data.description,
       pictures: "",
-      brand: "",
-      stock: "",
+      brand: data.brand,
+      stock: data.stock,
     },
     validationSchema: Yup.object({
       caption: Yup.string().required(
@@ -91,34 +90,27 @@ const CreateProductFrom = () => {
     }),
     onSubmit: async (values) => {
       setIsLoading(true);
-      const uniqueId = uid();
 
       if (productPhotos?.length === 0) {
         errorForm("Have at least 1 picture");
       } else {
-        await client.create({
-          _key: uniqueId,
-          _type: "product",
-          caption: values.caption,
-          subId: uniqueId,
-          price: values.price,
-          topic: values.topic,
-          description: values.description,
-          picture: productPhotos,
-          brand: values.brand,
-          stock: values.stock,
-          sellingBy: {
-            _type: "sellingBy",
-            _ref: user.userId,
-          },
-          likes: [],
-          comments: [],
-        });
+        await client
+          .patch(data._id)
+          .set({
+            caption: values.caption,
+            price: values.price,
+            topic: values.topic,
+            description: values.description,
+            picture: productPhotos,
+            brand: values.brand,
+            stock: values.stock,
+          })
+          .commit();
         formik.resetForm();
         setProductPhotos([]);
-
         navigate(`/myProducts/${user.userId}`);
       }
+
       setIsLoading(false);
     },
   });
@@ -142,7 +134,7 @@ const CreateProductFrom = () => {
         className="flex flex-col w-full gap-2 h-fit border p-2 shadow-md bg-lightGray md:w-1/2"
         onSubmit={formik.handleSubmit}
       >
-        <div className="text-3xl font-semibold ">Create Product</div>
+        <div className="text-3xl font-semibold ">Edit Product</div>
 
         <div className="flex flex-col gap-2">
           <label htmlFor="caption">Caption</label>
@@ -260,7 +252,7 @@ const CreateProductFrom = () => {
           type="submit"
           disabled={isLoading}
         >
-          {isLoading ? <ImSpinner2 className="animate-spin" /> : "Create"}
+          {isLoading ? <ImSpinner2 className="animate-spin" /> : "Save"}
         </button>
       </form>
       <div className="w-full md:w-1/2 h-full rounded-md overflow-hidden">
@@ -309,4 +301,4 @@ const CreateProductFrom = () => {
   );
 };
 
-export default CreateProductFrom;
+export default EditForm;

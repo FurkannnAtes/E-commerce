@@ -1,12 +1,12 @@
-import "react-toastify/dist/ReactToastify.css";
-import { AiFillStar } from "react-icons/ai";
-import { GrFormClose } from "react-icons/gr";
-
 import { useEffect, useState } from "react";
 import ReactStars from "react-stars";
 import { useSelector } from "react-redux";
 import { leaveAComment, getSingleProduct } from "@/helpers/Api";
 import { uid } from "uid";
+
+//ICONS
+import { AiFillStar } from "react-icons/ai";
+import { GrFormClose } from "react-icons/gr";
 
 import LoadingModal from "@/components/LoadingModal";
 
