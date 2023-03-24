@@ -44,7 +44,7 @@ const MyProducts = () => {
   };
 
   return (
-    <div className="wrapper min-h-screen mx-auto pt-5">
+    <div className="wrapper min-h-screen mx-auto pt-5 px-2 lg:px-0">
       <div className="flex justify-between w-full px-2">
         <div className="flex items-center gap-2">
           <select

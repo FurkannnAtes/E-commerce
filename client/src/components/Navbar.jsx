@@ -1,17 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/store/auth";
 //icons
 import { BiSearchAlt } from "react-icons/bi";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { RxPerson } from "react-icons/rx";
-import { IoMdNotificationsOutline } from "react-icons/io";
+
 import { AiOutlineCaretUp } from "react-icons/ai";
 import { logoutBasket } from "@/store/basket";
 
 const Navbar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -30,14 +31,25 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   }, [location.pathname, navigate, user]);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trimStart() !== "") {
+      navigate(`/search/${searchQuery.trimStart()}`);
+      setSearchQuery("");
+    }
+  };
+
   return (
     <div
       className={`${
         unValidPaths.includes(location.pathname) ? "hidden" : "flex"
-      }  flex-col `}
+      }  flex-col h-[120px] md:h-[81px] `}
     >
       <div className="h-[120px] md:h-[81px] bg-mainRed  flex items-center fixed  w-full z-30">
-        <div className="flex flex-col gap-2 md:flex-row p-2 md:justify-between wrapper mx-auto w-full ">
+        <form
+          onSubmit={handleSearch}
+          className="flex flex-col gap-2 md:flex-row p-2 md:justify-between wrapper mx-auto w-full "
+        >
           <div className="relative w-full md:w-7/12 h-[48px]">
             <Link
               to="/"
@@ -50,12 +62,18 @@ const Navbar = () => {
               />
               <div>Ofenos</div>
             </Link>
+
             <input
               className="h-full w-full rounded-full pl-36 outline-none"
               type="text"
-              placeholder="Search "
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="absolute top-1/2 -translate-y-1/2 right-4 text-2xl">
+            <button
+              type="submit"
+              className="absolute top-1/2 -translate-y-1/2 right-4 text-2xl"
+            >
               <BiSearchAlt />
             </button>
           </div>
@@ -146,9 +164,7 @@ const Navbar = () => {
                 </div>
               </div>
             </button>
-            <button className="text-white text-4xl ">
-              <IoMdNotificationsOutline />
-            </button>
+
             <div className="w-[1px] h-[20px] bg-black"></div>
             {!user.userName ? (
               <div className="text-white flex items-center gap-2">
@@ -231,10 +247,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
-        </div>
-      </div>
-      <div className="h-[46px] flex items-center bg-lightGray border-b shadow-md mt-[120px] px-2 md:p-0 md:mt-[81px] ">
-        <div className="flex gap-2  wrapper mx-auto w-full">Home</div>
+        </form>
       </div>
     </div>
   );

@@ -5,12 +5,9 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import ReactStars from "react-stars";
 import { evaluationCalculate } from "@/helpers/Api";
 import { Link } from "react-router-dom";
-import { AiOutlineEdit } from "react-icons/ai";
-import { useSelector } from "react-redux";
-const MyProductCard = ({ product }) => {
-  const [evaluation, setEvaluation] = useState(0);
 
-  const user = useSelector((state) => state.auth.user);
+const ProductCard = ({ product }) => {
+  const [evaluation, setEvaluation] = useState(0);
 
   useEffect(() => {
     evaluationCalculate(product._id).then((res) => setEvaluation(res));
@@ -30,14 +27,7 @@ const MyProductCard = ({ product }) => {
           alt=""
         />
       </Link>
-      {user.userId === product.sellingBy._ref ? (
-        <Link
-          to={`/edit/${product._id}`}
-          className="absolute hidden p-3 border rounded-full top-2 right-2 group-hover:flex cursor-pointer"
-        >
-          <AiOutlineEdit />
-        </Link>
-      ) : null}
+
       <div className="flex flex-col h-full p-2">
         <div>
           <div className="line-clamp-2 h-[50px]">{product.caption}</div>
@@ -61,4 +51,4 @@ const MyProductCard = ({ product }) => {
   );
 };
 
-export default MyProductCard;
+export default ProductCard;
