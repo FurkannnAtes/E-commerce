@@ -17,7 +17,7 @@ const MyProductCard = ({ product }) => {
   }, [product._id]);
 
   return (
-    <div className="bg-white  max-w-[300px] mx-auto group border hover:shadow-md duration-300 flex flex-col gap-3 pb-2 rounded-md relative">
+    <div className="bg-white w-full  max-w-[300px] mx-auto group border hover:shadow-md duration-300 flex flex-col gap-3 pb-2 rounded-md relative">
       <Link
         to={`/productDetails/${product._id}`}
         className="border-b pb-2 w-full flex justify-center "
@@ -30,7 +30,7 @@ const MyProductCard = ({ product }) => {
           alt=""
         />
       </Link>
-      {user.userId === product.sellingBy._ref ? (
+      {user?.userId === product.sellingBy._ref ? (
         <Link
           to={`/edit/${product._id}`}
           className="absolute hidden p-3 border rounded-full top-2 right-2 group-hover:flex cursor-pointer"

@@ -1,14 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { GoogleLogin } from "@react-oauth/google";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { googleAuth, register } from "@/store/auth";
 import { client } from "@/utils/client";
+import { ImSpinner2 } from "react-icons/im";
+
+//TOASTIFY
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignInForm = () => {
+  const [isLoading, setisLoading] = useState(false);
+
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -29,6 +37,7 @@ const SignInForm = () => {
         .required("Please do not leave any spaces in the form."),
     }),
     onSubmit: async (values) => {
+      setisLoading(true);
       const query = `*[_type == "user" && email == "${values.email}"][0]`;
       const res = await client.fetch(query);
       dispatch(
@@ -39,13 +48,31 @@ const SignInForm = () => {
           res,
         })
       );
+      if (!user.userName) {
+        error("This email has been used");
+      }
+      setisLoading(false);
     },
   });
+
+  const error = (message) => toast.error(message);
   return (
     <form
       className="flex flex-col gap-2 border p-2 shadow-md bg-lightGray "
       onSubmit={formik.handleSubmit}
     >
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="text-3xl font-semibold ">Sing In</div>
 
       <label htmlFor="name">Full Name</label>
@@ -108,10 +135,10 @@ const SignInForm = () => {
         </div>
       </div>
       <button
-        className="bg-[#27C007] text-white font-semibold text-lg p-2"
+        className="bg-[#27C007] text-white font-semibold text-lg p-2 flex items-center justify-center h-[40px]"
         type="submit"
       >
-        Sing In
+        {isLoading ? <ImSpinner2 className="animate-spin" /> : "Sing In"}
       </button>
     </form>
   );

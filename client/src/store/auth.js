@@ -48,13 +48,10 @@ export const authSlice = createSlice({
 
         localStorage.setItem("user", JSON.stringify(newUser));
         state.user = newUser;
-      } else {
-        console.log("olmadi");
       }
     },
     register: (state, action) => {
       if (action.payload.res) {
-        console.log("var yapaman");
       } else {
         const userId = uid();
         client.createIfNotExists({

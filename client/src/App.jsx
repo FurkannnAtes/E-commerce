@@ -11,11 +11,11 @@ const App = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user.userName) {
+    if (user?.userName) {
       const query = `*[_type == "user" && subId == "${user.userId}"][0]`;
       client.fetch(query).then((res) => dispatch(getUserBasket(res.basket)));
     }
-  }, [dispatch, user.userId, user.userName]);
+  }, [dispatch, user]);
 
   const routesComponent = routes.map(({ path, component }, key) => (
     <Route path={path} element={component} key={key} />

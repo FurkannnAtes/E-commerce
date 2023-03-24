@@ -13,9 +13,9 @@ const BuymentHistory = () => {
       setData(res.buymentStory);
       setSkeleton(false);
     });
-  }, [user.userId]);
+  }, [user?.userId]);
   return (
-    <div className="wrapper mx-auto min-h-screen py-5  flex flex-col gap-5">
+    <div className="wrapper mx-auto min-h-screen py-5  flex flex-col-reverse gap-5">
       {skeleton === false && data?.length === 0 ? (
         <div className="text-3xl m-auto  mt-52 w-fit h-fit  text-gray-400 font-semibold">
           Unfortunately the purchase history is empty :(

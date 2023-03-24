@@ -44,7 +44,7 @@ const MyProducts = () => {
   };
 
   return (
-    <div className="wrapper min-h-screen mx-auto pt-5 px-2 lg:px-0">
+    <div className="wrapper min-h-screen mx-auto pt-5 px-2 lg:px-0 relative">
       <div className="flex justify-between w-full px-2">
         <div className="flex items-center gap-2">
           <select
@@ -66,12 +66,16 @@ const MyProducts = () => {
           <div className="flex flex-col ">
             <div className="font-semibold">{seller?.userName}</div>
             <div>
-              <span className="font-semibold">Items:</span> {data?.length}
+              {data?.length === 0 ? null : (
+                <div>
+                  <span className="font-semibold">Items:</span> {data?.length}
+                </div>
+              )}
             </div>
           </div>
         </div>{" "}
         <div>
-          {user.userId === params.id ? (
+          {user?.userId === params.id ? (
             <div>
               <Link
                 to={`/createProduct`}
@@ -83,10 +87,15 @@ const MyProducts = () => {
           ) : null}
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 py-5 px-2 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 py-5 px-0  ">
         {data?.map((product, i) => (
           <MyProductCard key={i} product={product} />
         ))}
+        {!skeleton && data.length === 0 ? (
+          <div className="text-gray-400 font-semibold text-4xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+            Unfortunately there is no product
+          </div>
+        ) : null}
         {skeleton ? <Skeleton type="myProductCard" /> : null}
       </div>
     </div>
