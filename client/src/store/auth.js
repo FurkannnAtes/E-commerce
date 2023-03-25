@@ -68,7 +68,7 @@ export const authSlice = createSlice({
         const newUser = {
           userName: action.payload.name,
           email: action.payload.email,
-          userId: action.payload.subId,
+          userId: userId,
         };
 
         localStorage.setItem("user", JSON.stringify(newUser));

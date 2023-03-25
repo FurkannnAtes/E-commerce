@@ -183,7 +183,7 @@ const ProductDetails = () => {
 
           <div className="mt-auto ">
             <button
-              disabled={isLoading || maxAmount === 0}
+              disabled={isLoading || maxAmount === 0 || !user.userName}
               onClick={async () => {
                 setIsLoading(true);
                 try {
